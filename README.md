@@ -1,12 +1,30 @@
-# AWS CDK with Express Template
+# Node-Serverless-Template
 
-Simple template with AWS CDK and Express
+Node API template for aws serverless service
 
 ## Feature
 
 -   Partial installation using npm --only
 -   Enable import using the Babel
 -   Setting up API testing locally
+
+## Usage
+
+-   Configurate your aws credentials file
+
+    ✔ Default path: C/User/{userName}/.aws/credentials
+
+    ```text
+    [dev]
+    aws_access_key_id={your_aws_access_key_id}
+    aws_secret_access_key={your_aws_secret_access_key}
+
+    [prod]
+    aws_access_key_id={your_aws_access_key_id}
+    aws_secret_access_key={your_aws_secret_access_key}
+    ```
+
+    📌 If you want to change the name, please change it with the script of package.json
 
 ## Installation
 
@@ -30,25 +48,40 @@ Simple template with AWS CDK and Express
     npm run package-install-window
     ```
 
-
 ## Run
 
-- Offline API test
+-   Offline API test
+
     ```
-    npm run express-offline
+    npm run offline
     ```
 
-- Bootstrap
+-   Bootstrap
+
     ```
-    npm run bootstrap
+    // Dev
+    npm run bootstrap-dev
+
+    // Prod
+    npm run bootstrap-prod
     ```
 
-- Deploy
+-   Deploy
+
     ```
-    npm run deploy
+    // Dev
+    npm run deploy-dev
+
+    // Prod
+    npm run deploy-prod
     ```
 
-- Destroy
+-   Destroy
+
     ```
-    npm run destroy
+    // Dev
+    npm run destroy-dev
+
+    // Prod
+    npm run destroy-prod
     ```

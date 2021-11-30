@@ -1,0 +1,17 @@
+== 추가기능 ==
+Lambda의 보안그룹에서 destinationCidrBlock 허용해주기
+
+아래 자료 참고해서 Swagger to CDK lambda 작성
+https://gist.github.com/abbottdev/17379763ebc14a5ecbf2a111ffbcdd86
+
+아래 라이브러리 이용해서 Swagger hosting 작성
+https://www.npmjs.com/package/aws-serverless-swagger-ui
+
+== 정리 ==
+install.ts 파일로 package.json 명령어 정리하기
+INFRA_ENV 환경변수로 setting.ts 파일 내용 정리하기
+
+== CI/CD ==
+npm i -g aws-cli
+aws cli configure profile `with env variables`
+npm run deploy --proflie xx
