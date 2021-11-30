@@ -22,7 +22,7 @@
         "diff-prod": "npm run build && cross-env INFRA_ENV=production cdk diff --profile prod",
         "destroy-prod": "cross-env INFRA_ENV=production cdk destroy --profile prod"
     },
-    "author": "Lee Jeong-Woo",
+    "author": "Lee Jeong-Woo, Lim Jae-young",
     "repository": {
         "type": "git",
         "url": "https://github.com/zao95/Node-Serverless-Template"
