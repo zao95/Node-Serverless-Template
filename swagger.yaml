@@ -10,7 +10,7 @@ paths:
   /:
     get:
       x-cdk-lambda-code: ./dist
-      x-cdk-lambda-handler: entry.handler
+      x-cdk-lambda-handler: example.handler
       x-cdk-lambda-name: helloWorldGetLambda
       description: Returns a greeting to the user!
       produces:
@@ -25,26 +25,10 @@ paths:
           description: Returns the greeting.
           schema:
             type: object
-  /cache:
+  /cache: # /cache/3/
     get:
       x-cdk-lambda-code: ./dist
-      x-cdk-lambda-handler: entry.handler
-      x-cdk-lambda-name: helloCacheGetLambda
-      description: Returns a greeting to the user!
-      # parameters:
-      # - in: query
-      #   name: test
-      #   type: string
-      #   description: The test
-      responses:
-        200:
-          description: Returns the greeting.
-          schema:
-            type: string
-  /dev:
-    get:
-      x-cdk-lambda-code: ./dist
-      x-cdk-lambda-handler: entry.handler
+      x-cdk-lambda-handler: example.handler
       x-cdk-lambda-name: helloCacheGetLambda
       description: Returns a greeting to the user!
       # parameters:
