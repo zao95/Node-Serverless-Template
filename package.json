@@ -40,7 +40,6 @@
         "@babel/preset-env": "^7.16.4",
         "@babel/preset-typescript": "^7.16.0",
         "@types/aws-lambda": "^8.10.85",
-        "@types/aws-serverless-express": "^3.3.5",
         "@types/node": "^16.11.11",
         "aws-cdk": "1.134.0",
         "core-js": "^3.19.2",
@@ -49,8 +48,6 @@
         "typescript": "^4.5.2"
     },
     "dependencies": {
-        "aws-serverless-express": "^3.4.0",
-        "express": "^4.17.1",
         "md5": "^2.3.0",
         "mysql2": "^2.3.3"
     }
