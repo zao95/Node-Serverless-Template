@@ -1,0 +1,17 @@
+
+// API Gateway event & Express req조합
+
+// path: event.path
+
+// API Gateway event
+// resource: event.resource,
+// path: event.path,
+// httpMethod: event.httpMethod,
+// headers: event.headers,
+// multiValueHeaders: event.multiValueHeaders,
+// queryStringParameters: event.queryStringParameters,
+// multiValueQueryStringParameters: event.multiValueQueryStringParameters,
+// pathParameters: event.pathParameters,
+// stageVariables: event.stageVariables,
+// requestContext: event.requestContext,
+// isBase64Encoded: event.isBase64Encoded,
