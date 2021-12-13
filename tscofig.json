@@ -1,7 +1,8 @@
 {
+    "type": "module",
     "compilerOptions": {
         "target": "esnext",
-        "module": "commonjs",
+        "module": "ESNext",
         "moduleResolution": "node",
         "lib": ["es2017", "esnext.asynciterable"],
         "emitDeclarationOnly": true,
