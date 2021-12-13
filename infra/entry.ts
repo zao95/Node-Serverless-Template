@@ -8,5 +8,5 @@ import StackConstruct from './StackConstruct'
 SwaggerParser.parse('./swagger.yaml').then((swagger) => {
     const app = new App()
     new StackConstruct(app, setting.construct.key, { swagger })
-    app.synth()
+    app.synth() // cdk 프로세스 4단계중에 하나다
 })
