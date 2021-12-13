@@ -28,7 +28,7 @@ paths:
   /cache: # /cache/3/
     get:
       x-cdk-lambda-code: ./dist
-      x-cdk-lambda-handler: example.handler
+      x-cdk-lambda-handler: example.handler2
       x-cdk-lambda-name: helloCacheGetLambda
       description: Returns a greeting to the user!
       # parameters:
