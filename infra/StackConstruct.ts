@@ -1,4 +1,4 @@
-import { Construct, App } from '@aws-cdk/core'
+import { Construct, App, Tags } from '@aws-cdk/core'
 import setting from './setting'
 import CommonStack from './stacks/CommonStack'
 
@@ -13,6 +13,7 @@ class StackConstruct extends Construct {
             env: setting.envKR,
             swagger: props.swagger,
         })
+        Tags.of(CommonStackObj).add('project', 'Slipy')
 
         // Module 1
         // const moduleOneStack = new ModulOneStack(

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { App } from '@aws-cdk/core'
-import SwaggerParser from 'swagger-parser'
+import SwaggerParser from '@apidevtools/swagger-parser'
 import setting from './setting'
 import StackConstruct from './StackConstruct'
 
