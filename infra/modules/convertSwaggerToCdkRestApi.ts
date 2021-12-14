@@ -38,6 +38,7 @@ interface lambdaProps {
     tracing?
     vpc?
     vpcSubnets?
+    key?
 }
 const convertSwaggerToCdkRestApi = (
     scope: Construct,
