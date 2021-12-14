@@ -87,8 +87,8 @@ const installOnlyProd = async () => {
     try {
         let isSuccess = false
         const commands = {
-            npm: 'cd ./dist && npm install --only=prod',
-            yarn: 'cd ./dist && yarn install --production=true',
+            npm: 'cd ./dist && npm install --only=prod --silent',
+            yarn: 'cd ./dist && yarn install --production=true --silent',
         }
         for (const command in commands) {
             const result = await exec(commands[command])
