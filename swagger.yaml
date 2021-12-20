@@ -10,7 +10,7 @@ x-base:
   default: ['md2', 'mysql2']
 
 paths:
-  /users/{pathtest}/status:
+  /:
     get:
       x-cdk-lambda-code: ./dist # 람다에 올려질 폴더
       x-cdk-lambda-handler: example.handler # 실행이 되는 핸들러 파일
@@ -19,11 +19,39 @@ paths:
       produces:
         - application/json
       parameters:
-      - name: pathtest
-        in: path
+      - in: query
+        name: test
         required: true
         type: integer
         description: The test
+      responses:
+        200:
+          description: Returns the greeting.
+          schema:
+            type: object
+    post:
+      x-cdk-lambda-code: ./dist # 람다에 올려질 폴더
+      x-cdk-lambda-handler: example.handler # 실행이 되는 핸들러 파일
+      x-cdk-lambda-name: helloWorldGetLambdaTest # 이름
+      description: Returns a greeting to the user!
+      produces:
+        - application/json
+      parameters:
+      - in: body
+        name: user
+        description: The user to create.
+        schema:
+          type: object
+          required:
+            - userName
+            - firstName
+          properties:
+            userName:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
       responses:
         200:
           description: Returns the greeting.

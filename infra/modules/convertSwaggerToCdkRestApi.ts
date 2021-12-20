@@ -1,5 +1,11 @@
 import { Construct } from '@aws-cdk/core'
-import { RestApi, LambdaIntegration } from '@aws-cdk/aws-apigateway'
+import {
+    RestApi,
+    LambdaIntegration,
+    Model,
+    JsonSchemaType,
+    RequestValidator,
+} from '@aws-cdk/aws-apigateway'
 import { Runtime, Function, Code, FunctionProps } from '@aws-cdk/aws-lambda'
 import { IVpc, Vpc, SubnetType } from '@aws-cdk/aws-ec2'
 import { LogGroup, RetentionDays } from '@aws-cdk/aws-logs'
@@ -15,6 +21,7 @@ const changeToUppercaseFirstLetter = (strings: string): string => {
         )
         .join('')
 }
+
 const getParameterType = (swaggerIn: string): string => {
     if (swaggerIn === 'query') return 'querystring'
     else if (swaggerIn === 'path') return 'path'
@@ -24,6 +31,18 @@ const getParameterType = (swaggerIn: string): string => {
         throw new Error(
             `요청하신 api parameter 종류인 ${swaggerIn}을 찾을 수 없습니다.`
         )
+}
+
+const isEmpty = (param) => Object.keys(param).length === 0
+
+const jsonSchemaTypeDictionary = {
+    array: JsonSchemaType.ARRAY,
+    boolean: JsonSchemaType.BOOLEAN,
+    integer: JsonSchemaType.INTEGER,
+    null: JsonSchemaType.NULL,
+    number: JsonSchemaType.NUMBER,
+    object: JsonSchemaType.OBJECT,
+    string: JsonSchemaType.STRING,
 }
 
 interface ILambdaProps {
@@ -88,32 +107,75 @@ const convertSwaggerToCdkRestApi = (
                 ...lambdaProps,
             })
 
+            let hasRequestParameter: boolean = false
+            let hasRequestBody: boolean = false
             let integrationParameters: any = undefined
             let methodParameters: any = undefined
+            let modelSchema: any = undefined
 
-            if (apiData.parameters && apiData.parameters.length) {
-                const parameters: any[] = apiData.parameters
+            if (apiData['parameters'] && apiData['parameters'].length) {
+                const parameters: any[] = apiData['parameters']
                 integrationParameters = {}
                 methodParameters = {}
 
-                parameters.forEach((swaggerParameter, idx) => {
-                    const parameterType = getParameterType(swaggerParameter.in)
-                    console.log('\nintegrationParameters', idx)
-                    console.log(
-                        'integrationParameters Key: ',
-                        `integration.request.${parameterType}.${swaggerParameter.name}`
-                    )
-                    console.log(
-                        'integrationParameters Value: ',
-                        `method.request.${parameterType}.${swaggerParameter.name}`
-                    )
-                    integrationParameters[
-                        `integration.request.${parameterType}.${swaggerParameter.name}`
-                    ] = `method.request.${parameterType}.${swaggerParameter.name}`
-                    methodParameters[
-                        `method.request.${parameterType}.${swaggerParameter.name}`
-                    ] = true
+                parameters.forEach((parameter, idx) => {
+                    const parameterType = getParameterType(parameter['in'])
+                    if (parameterType === 'body') {
+                        hasRequestBody = true
+                        modelSchema = {}
+                        const schema = parameter['schema']
+                        modelSchema.title = lambdaId
+                        modelSchema.description = apiData['description']
+                        modelSchema.type = jsonSchemaTypeDictionary[schema.type]
+                        if (!isEmpty(schema.properties)) {
+                            modelSchema.properties = {}
+                            for (const property in schema.properties) {
+                                const propertyType =
+                                    schema.properties[property].type
+                                modelSchema.properties[property] = {
+                                    type: jsonSchemaTypeDictionary[
+                                        propertyType
+                                    ],
+                                }
+                            }
+                        }
+                        if (!isEmpty(schema.required)) {
+                            modelSchema.required = schema.required
+                        }
+                    } else {
+                        hasRequestParameter = true
+                        integrationParameters[
+                            `integration.request.${parameterType}.${parameter['name']}`
+                        ] = `method.request.${parameterType}.${parameter['name']}`
+                        methodParameters[
+                            `method.request.${parameterType}.${parameter['name']}`
+                        ] = parameter.required ?? false
+                    }
                 })
+            }
+
+            let model = undefined
+            if (modelSchema) {
+                model = apiGateway.addModel(`${lambdaId}Model`, {
+                    modelName: `${lambdaId}Model`,
+                    description: apiData['description'],
+                    contentType: apiData['produces'][0],
+                    schema: modelSchema,
+                })
+            }
+
+            let requestValidator: any = undefined
+            if (hasRequestBody || hasRequestParameter) {
+                requestValidator = new RequestValidator(
+                    scope,
+                    `${lambdaId}RequestValidator`,
+                    {
+                        restApi: apiGateway,
+                        requestValidatorName: `${lambdaId}RequestValidator`,
+                        validateRequestBody: hasRequestBody,
+                        validateRequestParameters: hasRequestParameter,
+                    }
+                )
             }
 
             resource.addMethod(
@@ -122,6 +184,14 @@ const convertSwaggerToCdkRestApi = (
                     requestParameters: integrationParameters,
                 }),
                 {
+                    ...(modelSchema && {
+                        requestModels: {
+                            [apiData['produces'][0]]: model,
+                        },
+                    }),
+                    ...(requestValidator && {
+                        requestValidator: requestValidator,
+                    }),
                     requestParameters: methodParameters,
                 }
             )
