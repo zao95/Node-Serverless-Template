@@ -11,7 +11,8 @@
         "bootstrap": "npm run build && cross-env INFRA_ENV=development cdk bootstrap",
         "deploy": "npm run build && cross-env INFRA_ENV=development cdk deploy --require-approval never",
         "diff": "npm run build && cross-env INFRA_ENV=development cdk diff",
-        "destroy": "cross-env INFRA_ENV=development cdk destroy --force"
+        "destroy": "cross-env INFRA_ENV=development cdk destroy --force",
+        "offline-test": "ts-node ./offline/entry.ts"
     },
     "author": "Lee Jeong-Woo, Lim Jae-young",
     "repository": {
