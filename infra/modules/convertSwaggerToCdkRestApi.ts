@@ -2,9 +2,31 @@ import { Construct } from '@aws-cdk/core'
 import { RestApi, LambdaIntegration } from '@aws-cdk/aws-apigateway'
 import { Runtime, Function, Code, FunctionProps } from '@aws-cdk/aws-lambda'
 import { IVpc, Vpc, SubnetType } from '@aws-cdk/aws-ec2'
-import { RetentionDays } from '@aws-cdk/aws-logs'
+import { LogGroup, RetentionDays } from '@aws-cdk/aws-logs'
 
-interface lambdaProps {
+const changeToUppercaseFirstLetter = (strings: string): string => {
+    return strings
+        .replace(/\{|\}/g, '')
+        .split('/')
+        .map(
+            (string) =>
+                string.slice(0, 1).toUpperCase() +
+                string.slice(1, string.length)
+        )
+        .join('')
+}
+const getParameterType = (swaggerIn: string): string => {
+    if (swaggerIn === 'query') return 'querystring'
+    else if (swaggerIn === 'path') return 'path'
+    else if (swaggerIn === 'header') return 'header'
+    else if (swaggerIn === 'body') return 'body'
+    else
+        throw new Error(
+            `요청하신 api parameter 종류인 ${swaggerIn}을 찾을 수 없습니다.`
+        )
+}
+
+interface ILambdaProps {
     runtime
     allowAllOutbound?
     allowPublicSubnet?
@@ -43,55 +65,60 @@ interface lambdaProps {
 const convertSwaggerToCdkRestApi = (
     scope: Construct,
     apiGateway: RestApi,
-    swaggerApi: any,
-    lambdaProps?: lambdaProps
+    swagger: any,
+    lambdaProps?: ILambdaProps
 ) => {
-    console.log(swaggerApi)
-    let createdLambdas: Map<string, Function> = new Map<string, Function>()
-    let paths = Object.keys(swaggerApi.paths)
+    let paths = Object.keys(swagger.paths)
 
     paths.forEach((pathName) => {
         const resource = apiGateway.root.resourceForPath(pathName)
-        const methods = Object.keys(swaggerApi.paths[pathName])
+        const methods = Object.keys(swagger.paths[pathName])
 
         methods.forEach((methodName) => {
-            let endpoint = swaggerApi.paths[pathName][methodName]
-            let backingLambda: Function
-
-            if (createdLambdas.has(endpoint['x-cdk-lambda-name']) === false) {
-                createdLambdas.set(
-                    endpoint['x-cdk-lambda-name'],
-                    new Function(scope, endpoint['x-cdk-lambda-name'], {
-                        code: Code.fromAsset(endpoint['x-cdk-lambda-code']),
-                        handler: endpoint['x-cdk-lambda-handler'],
-                        ...lambdaProps,
-                    })
-                )
-            }
-
-            backingLambda = createdLambdas.get(endpoint['x-cdk-lambda-name'])!
+            const apiData = swagger.paths[pathName][methodName]
+            const lambdaId =
+                methodName +
+                (pathName === '/' ? '' : changeToUppercaseFirstLetter(pathName))
+            const lambda: Function = new Function(scope, lambdaId, {
+                functionName: lambdaId,
+                description: apiData['description'],
+                code: Code.fromAsset(apiData['x-cdk-lambda-code']),
+                handler: apiData['x-cdk-lambda-handler'],
+                logRetention: RetentionDays.TEN_YEARS,
+                ...lambdaProps,
+            })
 
             let integrationParameters: any = undefined
             let methodParameters: any = undefined
 
-            if (endpoint.parameters && endpoint.parameters.length) {
-                let parameters: any[] = endpoint.parameters
+            if (apiData.parameters && apiData.parameters.length) {
+                const parameters: any[] = apiData.parameters
                 integrationParameters = {}
                 methodParameters = {}
 
-                parameters.forEach((swaggerParameter) => {
+                parameters.forEach((swaggerParameter, idx) => {
+                    const parameterType = getParameterType(swaggerParameter.in)
+                    console.log('\nintegrationParameters', idx)
+                    console.log(
+                        'integrationParameters Key: ',
+                        `integration.request.${parameterType}.${swaggerParameter.name}`
+                    )
+                    console.log(
+                        'integrationParameters Value: ',
+                        `method.request.${parameterType}.${swaggerParameter.name}`
+                    )
                     integrationParameters[
-                        `integration.request.${swaggerParameter.in}.${swaggerParameter.name}`
-                    ] = `method.request.${swaggerParameter.in}.${swaggerParameter.name}`
+                        `integration.request.${parameterType}.${swaggerParameter.name}`
+                    ] = `method.request.${parameterType}.${swaggerParameter.name}`
                     methodParameters[
-                        `method.request.${swaggerParameter.in}.${swaggerParameter.name}`
+                        `method.request.${parameterType}.${swaggerParameter.name}`
                     ] = true
                 })
             }
 
             resource.addMethod(
                 methodName,
-                new LambdaIntegration(backingLambda, {
+                new LambdaIntegration(lambda, {
                     requestParameters: integrationParameters,
                 }),
                 {

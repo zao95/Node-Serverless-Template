@@ -15,17 +15,17 @@ paths:
       description: Returns a greeting to the user!
       produces:
         - application/json
-      # parameters:
-      # - in: query
-      #   name: test
-      #   type: string
-      #   description: The test
+      parameters:
+      - in: query
+        name: test
+        type: string
+        description: The test
       responses:
         200:
           description: Returns the greeting.
           schema:
             type: object
-  /cache: # /cache/3/
+  /cache:
     get:
       x-cdk-lambda-code: ./dist
       x-cdk-lambda-handler: example.handler2
