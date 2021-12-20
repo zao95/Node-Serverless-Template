@@ -29,7 +29,7 @@ paths:
           description: Returns the greeting.
           schema:
             type: object
-  /cache: # /cache/3/
+  /cache:
     get:
       x-cdk-lambda-code: ./dist
       x-cdk-lambda-handler: example.handler2
