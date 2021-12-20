@@ -10,6 +10,19 @@ x-base:
   default: ['md2', 'mysql2']
 
 paths:
+  /users:
+    get:
+      x-cdk-lambda-code: ./dist # 람다에 올려질 폴더
+      x-cdk-lambda-handler: example.handler # 실행이 되는 핸들러 파일
+      x-cdk-lambda-name: helloWorldGetLambda # 이름
+      description: Returns a greeting to the user!
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns the greeting.
+          schema:
+            type: object
   /users/{pathtest}/status:
     get:
       x-cdk-lambda-code: ./dist # 람다에 올려질 폴더
