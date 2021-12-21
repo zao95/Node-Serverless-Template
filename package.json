@@ -4,7 +4,7 @@
     "description": "NextJS frontend template for aws serverless service",
     "scripts": {
         "install-dist": "node install.js",
-        "build": "npm run build-infra && npm run build-server",
+        "build": "npm run install-dist && npm run build-infra && npm run build-server",
         "build-server": "babel ./src --out-dir ./dist --extensions \".ts\"",
         "build-infra": "babel ./infra --out-dir ./infra-dist --extensions \".ts\"",
         "offline": "npm run build-server && set APP_ENV=Offline && node ./dist/entry.js",
