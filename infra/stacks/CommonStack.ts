@@ -43,7 +43,6 @@ class CommonStack extends Stack {
             key: 'slipyFunctions',
             runtime: Runtime.NODEJS_14_X,
             allowPublicSubnet: true,
-            logRetention: RetentionDays.TEN_YEARS,
             environment: {
                 APP_ENV: process.env.INFRA_ENV,
             },

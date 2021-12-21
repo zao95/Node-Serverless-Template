@@ -103,7 +103,6 @@ const convertSwaggerToCdkRestApi = (
                 description: apiData['description'],
                 code: Code.fromAsset(apiData['x-cdk-lambda-code']),
                 handler: apiData['x-cdk-lambda-handler'],
-                logRetention: RetentionDays.TEN_YEARS,
                 ...lambdaProps,
             })
 
