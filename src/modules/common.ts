@@ -1,17 +1,13 @@
 
-export const handler = async (event, context) => {
-	const response = {
-        statusCode: 200,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({
-			message: 'hello world!'
-		}),
-    }
-    
-    return response
+const aFunc = () => {
+    console.log('a')
 }
 
-// 1. API 별 필요한 모듈들만...
-//  - 
+const asyncFunc = async () => {
+    console.log('async')
+}
+
+module.exports = {
+    aFunc,
+    asyncFunc,
+}
