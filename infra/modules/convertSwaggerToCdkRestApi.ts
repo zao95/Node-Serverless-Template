@@ -6,7 +6,13 @@ import {
     JsonSchemaType,
     RequestValidator,
 } from '@aws-cdk/aws-apigateway'
-import { Runtime, Function, Code, FunctionProps } from '@aws-cdk/aws-lambda'
+import {
+    Runtime,
+    Function,
+    Code,
+    FunctionProps,
+    Tracing,
+} from '@aws-cdk/aws-lambda'
 import { IVpc, Vpc, SubnetType } from '@aws-cdk/aws-ec2'
 import { LogGroup, RetentionDays } from '@aws-cdk/aws-logs'
 
@@ -103,6 +109,7 @@ const convertSwaggerToCdkRestApi = (
                 description: apiData['description'],
                 code: Code.fromAsset(apiData['x-cdk-lambda-code']),
                 handler: apiData['x-cdk-lambda-handler'],
+                tracing: Tracing.ACTIVE,
                 ...lambdaProps,
             })
 
