@@ -7,7 +7,7 @@ info:
 # basePath: /v2
 
 x-base:
-  default: ['md2', 'mysql2']
+  library: ['md2', 'mysql2']
 
 paths:
   /:
