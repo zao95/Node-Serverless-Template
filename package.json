@@ -8,11 +8,10 @@
         "build-server": "babel ./src --out-dir ./dist --extensions \".ts\"",
         "build-infra": "babel ./infra --out-dir ./infra-dist --extensions \".ts\"",
         "offline": "npm run build-server && set APP_ENV=Offline && node ./dist/entry.js",
-        "bootstrap": "npm run build && cross-env INFRA_ENV=development cdk bootstrap --profile dev",
-        "deploy": "npm run build && cross-env INFRA_ENV=development cdk deploy --require-approval never --profile dev",
-        "diff": "npm run build && cross-env INFRA_ENV=development cdk diff --profile dev",
-        "destroy": "cross-env INFRA_ENV=development cdk destroy --force --profile dev",
-        "offline-test": "ts-node ./offline/entry.ts"
+        "bootstrap": "npm run build && cross-env INFRA_ENV=development cdk bootstrap --profile development",
+        "deploy": "npm run build && cross-env INFRA_ENV=development cdk deploy --require-approval never --profile development",
+        "diff": "npm run build && cross-env INFRA_ENV=development cdk diff --profile development",
+        "destroy": "cross-env INFRA_ENV=development cdk destroy --force --profile development"
     },
     "author": "Lee Jeong-Woo, Lim Jae-young",
     "repository": {

@@ -7,13 +7,13 @@ info:
 # basePath: /v2
 
 x-base:
-  default: ['md2', 'mysql2']
+  library: ['md2', 'mysql2']
 
 paths:
   /:
     get:
       x-cdk-lambda-code: ./dist # 람다에 올려질 폴더
-      x-cdk-lambda-handler: example.handler # 실행이 되는 핸들러 파일
+      x-cdk-lambda-handler: ./cache/API/cache/cache.handler # 실행이 되는 핸들러 파일
       x-cdk-lambda-name: helloWorldGetLambda # 이름
       description: Returns a greeting to the user!
       produces:
@@ -31,7 +31,7 @@ paths:
             type: object
     post:
       x-cdk-lambda-code: ./dist # 람다에 올려질 폴더
-      x-cdk-lambda-handler: example.handler # 실행이 되는 핸들러 파일
+      x-cdk-lambda-handler: ./cache/API/cache/cache.handler # 실행이 되는 핸들러 파일
       x-cdk-lambda-name: helloWorldGetLambdaTest # 이름
       description: Returns a greeting to the user!
       produces:
