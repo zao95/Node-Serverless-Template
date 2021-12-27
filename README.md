@@ -4,22 +4,24 @@ Node API template for aws serverless service
 
 ## Feature
 
--   Partial installation using npm --only
--   Enable import using the Babel
--   Setting up API testing locally
+-   Creating an api document creates an aws infrastructure with a serverless structure.
+-   Optimization due to install necessary libraries by API.
+-   Enable import Syntax and typescript using the Babel.
+-   Setting up API testing locally closest lambda environment.
 
 ## Usage
 
 -   Configurate your aws credentials file
 
-    ✔ Default path: C/User/{userName}/.aws/credentials
+    ✔ **Windows** default path: C/Users/{userName}/.aws/credentials
+    ✔ **Linux** or **macOS** default path: ~/.aws/credentials
 
     ```text
-    [dev]
+    [development]
     aws_access_key_id={your_aws_access_key_id}
     aws_secret_access_key={your_aws_secret_access_key}
 
-    [prod]
+    [production]
     aws_access_key_id={your_aws_access_key_id}
     aws_secret_access_key={your_aws_secret_access_key}
     ```
@@ -28,24 +30,12 @@ Node API template for aws serverless service
 
 ## Installation
 
-1. Make 'dist' directory
-
-    ```
-    mkdir dist
-    ```
-
-2. nodeJS modules install
+-   nodeJS modules install
 
     ⚠ **DO NOT USE NPM INSTALL**
 
     ```
-    // Linux
-    npm run package-install-linux
-    ```
-
-    ```
-    // Window
-    npm run package-install-window
+    npm run install-dist
     ```
 
 ## Run
@@ -59,29 +49,34 @@ Node API template for aws serverless service
 -   Bootstrap
 
     ```
-    // Dev
-    npm run bootstrap-dev
+    // Development
+    npm run bootstrap
 
-    // Prod
+    // Production
     npm run bootstrap-prod
     ```
 
 -   Deploy
 
     ```
-    // Dev
-    npm run deploy-dev
+    // Development
+    npm run deploy
 
-    // Prod
+    // Production
     npm run deploy-prod
     ```
 
 -   Destroy
 
     ```
-    // Dev
-    npm run destroy-dev
+    // Development
+    npm run destroy
 
-    // Prod
+    // Production
     npm run destroy-prod
     ```
+
+# Others
+
+-   We recommand [Dash Bird](https://app.dashbird.io/) service for watch lambda infos.
+-   We recommand [Planet Scale](https://planetscale.com/) service for database server.
