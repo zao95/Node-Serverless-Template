@@ -14,7 +14,8 @@
         "destroy": "cross-env INFRA_ENV=development cdk destroy --force",
         "offline-test": "ts-node ./offline/entry.ts",
         "bundle": "ts-node ./scripts/bundle.ts",
-        "cleanUp": "ts-node ./scripts/cleanUp.ts"
+        "cleanUp": "ts-node ./scripts/cleanUp.ts",
+        "test": "ts-node ./scripts/showLibraries.ts"
     },
     "author": "Lee Jeong-Woo, Lim Jae-young",
     "repository": {
@@ -43,7 +44,6 @@
         "typescript": "^4.5.4"
     },
     "dependencies": {
-        "md5": "^2.3.0",
-        "mysql2": "^2.3.3"
+        "md5": "^2.3.0"
     }
 }
