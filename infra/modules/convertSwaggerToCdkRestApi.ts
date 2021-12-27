@@ -89,6 +89,7 @@ interface ILambdaProps {
 }
 const convertSwaggerToCdkRestApi = (
     scope: Construct,
+    lambdaName: string,
     apiGateway: RestApi,
     swagger: any,
     lambdaProps?: ILambdaProps
@@ -102,7 +103,8 @@ const convertSwaggerToCdkRestApi = (
         methods.forEach((methodName) => {
             const apiData = swagger.paths[pathName][methodName]
             const lambdaId =
-                methodName +
+                lambdaName +
+                changeToUppercaseFirstLetter(methodName) +
                 (pathName === '/' ? '' : changeToUppercaseFirstLetter(pathName))
             const lambda: Function = new Function(scope, lambdaId, {
                 functionName: lambdaId,

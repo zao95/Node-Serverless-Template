@@ -39,19 +39,25 @@ class CommonStack extends Stack {
                 throttlingRateLimit: 10, // maximum request count per second
             },
         })
-        convertSwaggerToCdkRestApiModule(this, slipyApiGateway, props.swagger, {
-            key: 'slipyFunctions',
-            runtime: Runtime.NODEJS_14_X,
-            allowPublicSubnet: true,
-            environment: {
-                APP_ENV: process.env.INFRA_ENV,
-            },
-            vpcSubnets: {
-                subnetType: SubnetType.PUBLIC,
-            },
-            // vpc,
-            // securityGroups: [securityGroup],
-        })
+        convertSwaggerToCdkRestApiModule(
+            this,
+            'slipy',
+            slipyApiGateway,
+            props.swagger,
+            {
+                key: 'slipyFunctions',
+                runtime: Runtime.NODEJS_14_X,
+                allowPublicSubnet: true,
+                environment: {
+                    APP_ENV: process.env.INFRA_ENV,
+                },
+                vpcSubnets: {
+                    subnetType: SubnetType.PUBLIC,
+                },
+                // vpc,
+                // securityGroups: [securityGroup],
+            }
+        )
     }
 }
 

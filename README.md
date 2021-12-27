@@ -4,15 +4,17 @@ Node API template for aws serverless service
 
 ## Feature
 
--   Partial installation using npm --only
--   Enable import using the Babel
--   Setting up API testing locally
+-   Creating an api document creates an aws infrastructure with a serverless structure.
+-   Optimization due to install necessary libraries by API.
+-   Enable import Syntax and typescript using the Babel.
+-   Setting up API testing locally closest lambda environment.
 
 ## Usage
 
 -   Configurate your aws credentials file
 
-    ✔ Default path: C/User/{userName}/.aws/credentials
+    ✔ **Windows** default path: C/Users/{userName}/.aws/credentials
+    ✔ **Linux** or **macOS** default path: ~/.aws/credentials
 
     ```text
     [dev]
@@ -28,24 +30,12 @@ Node API template for aws serverless service
 
 ## Installation
 
-1. Make 'dist' directory
-
-    ```
-    mkdir dist
-    ```
-
-2. nodeJS modules install
+-   nodeJS modules install
 
     ⚠ **DO NOT USE NPM INSTALL**
 
     ```
-    // Linux
-    npm run package-install-linux
-    ```
-
-    ```
-    // Window
-    npm run package-install-window
+    npm run install-dist
     ```
 
 ## Run
@@ -60,7 +50,7 @@ Node API template for aws serverless service
 
     ```
     // Dev
-    npm run bootstrap-dev
+    npm run bootstrap
 
     // Prod
     npm run bootstrap-prod
@@ -70,7 +60,7 @@ Node API template for aws serverless service
 
     ```
     // Dev
-    npm run deploy-dev
+    npm run deploy
 
     // Prod
     npm run deploy-prod
@@ -80,8 +70,13 @@ Node API template for aws serverless service
 
     ```
     // Dev
-    npm run destroy-dev
+    npm run destroy
 
     // Prod
     npm run destroy-prod
     ```
+
+# Others
+
+-   We recommand [Dash Bird](https://app.dashbird.io/) service for watch lambda infos.
+-   We recommand [Planet Scale](https://planetscale.com/) service for database server.
