@@ -11,7 +11,11 @@
         "bootstrap": "npm run build && cross-env INFRA_ENV=development cdk bootstrap --profile development",
         "deploy": "npm run build && cross-env INFRA_ENV=development cdk deploy --require-approval never --profile development",
         "diff": "npm run build && cross-env INFRA_ENV=development cdk diff --profile development",
-        "destroy": "cross-env INFRA_ENV=development cdk destroy --force --profile development"
+        "destroy": "cross-env INFRA_ENV=development cdk destroy --force --profile development",
+        "bootstrap-prod": "npm run build && cross-env INFRA_ENV=production cdk bootstrap --profile production",
+        "deploy-prod": "npm run build && cross-env INFRA_ENV=production cdk deploy --require-approval never --profile production",
+        "diff-prod": "npm run build && cross-env INFRA_ENV=production cdk diff --profile production",
+        "destroy-prod": "cross-env INFRA_ENV=production cdk destroy --force --profile production"
     },
     "author": "Lee Jeong-Woo, Lim Jae-young",
     "repository": {

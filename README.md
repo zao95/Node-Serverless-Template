@@ -17,11 +17,11 @@ Node API template for aws serverless service
     ✔ **Linux** or **macOS** default path: ~/.aws/credentials
 
     ```text
-    [dev]
+    [development]
     aws_access_key_id={your_aws_access_key_id}
     aws_secret_access_key={your_aws_secret_access_key}
 
-    [prod]
+    [production]
     aws_access_key_id={your_aws_access_key_id}
     aws_secret_access_key={your_aws_secret_access_key}
     ```
@@ -49,30 +49,30 @@ Node API template for aws serverless service
 -   Bootstrap
 
     ```
-    // Dev
+    // Development
     npm run bootstrap
 
-    // Prod
+    // Production
     npm run bootstrap-prod
     ```
 
 -   Deploy
 
     ```
-    // Dev
+    // Development
     npm run deploy
 
-    // Prod
+    // Production
     npm run deploy-prod
     ```
 
 -   Destroy
 
     ```
-    // Dev
+    // Development
     npm run destroy
 
-    // Prod
+    // Production
     npm run destroy-prod
     ```
 
