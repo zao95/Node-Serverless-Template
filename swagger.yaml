@@ -6,9 +6,6 @@ info:
 
 # basePath: /v2
 
-x-base:
-  library: ['md2', 'mysql2']
-
 paths:
   /:
     get:
