@@ -5,7 +5,7 @@
     "scripts": {
         "install-dist": "node install.js",
         "build": "npm run build-infra && npm run build-server",
-        "build-server": "babel ./src --out-dir ./dist --extensions \".ts\"",
+        "build-server": "npm run bundle && babel ./dist/temp --out-dir ./dist --extensions \".ts\" && npm run cleanUp",
         "build-infra": "babel ./infra --out-dir ./infra-dist --extensions \".ts\"",
         "offline": "npm run build-server && set APP_ENV=Offline && node ./dist/entry.js",
         "bootstrap": "npm run build && cross-env INFRA_ENV=development cdk bootstrap --profile development",
