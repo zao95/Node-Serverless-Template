@@ -10,8 +10,9 @@ paths:
   /:
     get:
       x-cdk-lambda-code: ./dist/index # 람다에 올려질 폴더
-      x-cdk-lambda-handler: ./API/users/index.handler # 실행이 되는 핸들러 파일
+      x-cdk-lambda-handler: ./users/index.handler # 실행이 되는 핸들러 파일
       x-cdk-lambda-name: helloWorldGetLambda # 이름
+      x-cdk-additional-library: [md5]
       description: Returns a greeting to the user!
       produces:
         - application/json
@@ -28,7 +29,7 @@ paths:
             type: object
     post:
       x-cdk-lambda-code: ./dist/cache # 람다에 올려질 폴더
-      x-cdk-lambda-handler: ./API/cache.handler # 실행이 되는 핸들러 파일
+      x-cdk-lambda-handler: ./cache.handler # 실행이 되는 핸들러 파일
       x-cdk-lambda-name: helloWorldGetLambdaTest # 이름
       description: Returns a greeting to the user!
       produces:
