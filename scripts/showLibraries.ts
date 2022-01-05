@@ -7,54 +7,81 @@ import fs from 'fs/promises'
 const exec = util.promisify(childProcess.exec)
 
 const distPath: string = path.join(__dirname, '../dist')
+const srcPath: string = path.join(__dirname, '../src')
 const tempPath: string = path.join(distPath, './temp')
 
-const getRemoveLibraries = async () => {
-	const swagger: {[key: string]: any} = await SwaggerParser.parse(path.join(__dirname, '../swagger.yaml'))
+const extractDependencies = async (): Promise<{[key: string]: any}> => {
+	const packageJsonData = await fs.readFile(path.join(__dirname, '../package.json'))
+	const packageJson = Buffer.from(packageJsonData).toString('utf-8')
+	const packageInfo = JSON.parse(packageJson)
+	const dependencies: {[key: string]: any} = packageInfo?.dependencies || {}
+	return dependencies
+}
+
+const extractLambdaInfos = async (swagger: {[key: string]: any}): Promise<{[key: string]: any}> => {
 	const { paths } = swagger
 	
-	let removeLibraries: string[] = []
+	const lambdaInfos: {[key: string]: any} = {}
 	for (const pathKey in paths ){
-		const path = paths[pathKey]
-		for (const method in path ){
-			const additionalLibrary: string[] = path[method]['x-cdk-additional-library']
+		const pathInfo = paths[pathKey]
+		for (const method in pathInfo ){
+			const info = pathInfo[method]
+			const additionalLibrary: string[] = info['x-cdk-additional-library']
+			const lambdaName: string = info['x-cdk-lambda-name']
+			const handlerPath: string = path.join(srcPath, 'API', info['x-cdk-lambda-handler'])
+
+			lambdaInfos[lambdaName] = { handlerPath }
 			if(additionalLibrary){
-				additionalLibrary.forEach(library => removeLibraries.push(library))
+				lambdaInfos[lambdaName].additionalLibrary = additionalLibrary
 			}
 		}
 	}
-	return removeLibraries
+	
+	return lambdaInfos
 }
 
-const parsePackageJson = async () => {
-	const packageJson = await fs.readFile(path.join(__dirname, '../package.json'))
-	console.log()
-}
-
-const bundleLibrary = async () => {
+const bundle = async () => {
+	const swagger: {[key: string]: any} = await SwaggerParser.parse(path.join(__dirname, '../swagger.yaml'))
 	const commonPath = path.join(distPath, './common')
 	await fs.mkdir(commonPath, { recursive: true })
-	await fs.copyFile(path.join(__dirname, '../package.json'), path.join(commonPath, './package.json'))
-	await exec(`cd ${commonPath} && npm install --production`)
-	console.info('install complete')
 
-	const removeLibraries = await getRemoveLibraries()
-	for await (const target of removeLibraries){
-		await exec(`cd ${commonPath} && npm remove ${target}`)
+	const dependencies: {[key: string]: any} = await extractDependencies()
+	const lambdaInfos: {[key: string]: any} = await extractLambdaInfos(swagger)
+
+	await fs.mkdir(tempPath, { recursive: true })
+	for (const lambdaName in lambdaInfos){
+		const { handlerPath } = lambdaInfos[lambdaName]
+		await fs.mkdir(path.join(tempPath, lambdaName), { recursive: true })
+		console.log()
 	}
-	console.info('remove complete')
+
+	// const commonDependencies: {[key: string]: any} = { ...dependencies }
+	// const additionalDependencies: {[key: string]: any} = {}
+	// for await (const excludeTargetKey of additionalLibraries){
+	// 	const version = commonDependencies[excludeTargetKey]
+	// 	delete commonDependencies[excludeTargetKey]
+	// 	additionalDependencies[excludeTargetKey] = version
+	// }
+	// console.log(additionalDependencies)
+
+	// for (const libraryName in commonDependencies){
+	// 	const version = commonDependencies[libraryName]
+	// 	await exec(`npm i --prefix ${commonPath} ${libraryName}@${version}`)
+	// }
+	// console.info('sample install complete')
 	
-	const nodeModulesPath = path.join(commonPath, './node_modules')
-	const dirs = await fs.readdir(tempPath)
-	const promiseRes = dirs.map(async dir => {
-		const apiPath = path.join(tempPath, dir)
-		await copy(nodeModulesPath, path.join(apiPath, './node_modules'))
-	})
+	// const nodeModulesPath = path.join(commonPath, './node_modules')
+	// const dirs = await fs.readdir(tempPath)
+	// const promiseRes = dirs.map(async dir => {
+	// 	const apiPath = path.join(tempPath, dir)
+	// 	await copy(nodeModulesPath, path.join(apiPath, './node_modules'))
+	// 	await exec(`npm i --prefix ${apiPath} ${libraryName}@${version}`)
+	// })
 
-	for await (const res of promiseRes){
-		await res
-	}
-	console.info('bundle complete')
+	// for await (const res of promiseRes){
+	// 	await res
+	// }
+	// console.info('bundle complete')
 }
 
 const copy = async (src: string, dest: string): Promise<void> => {
@@ -71,5 +98,5 @@ const copy = async (src: string, dest: string): Promise<void> => {
 	}
 }
 
-bundleLibrary()
-// getRemoveLibraries()
+bundle()
+// extractDependencies()
