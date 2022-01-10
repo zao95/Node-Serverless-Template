@@ -31,12 +31,14 @@ const extractLambdaInfos = async (swagger: {[key: string]: any}): Promise<{[key:
 		const pathInfo = paths[pathKey]
 		for (const method in pathInfo ){
 			const info = pathInfo[method]
-			const additionalLibrary: string[] = info['x-cdk-additional-library']
-			const lambdaName: string = info['x-cdk-lambda-name']
-			const handlerPath: string = path.join(srcPath, 'API', info['x-cdk-lambda-handler'])
 
-			lambdaInfos[lambdaName] = { handlerPath }
-			lambdaInfos[lambdaName].additionalLibrary = additionalLibrary ? additionalLibrary : []
+			const lambdaName: string = info['x-cdk-lambda-name']
+			const additionalLibrary: string[] = info['x-cdk-additional-library'] || []
+			
+			const handler: string = path.join(srcPath, 'API', info['x-cdk-lambda-handler'])
+			const handlerPath = handler.replace(path.extname(handler), '.ts')
+
+			lambdaInfos[lambdaName] = { additionalLibrary, handlerPath }
 		}
 	}
 	
@@ -57,8 +59,7 @@ const bundle = async () => {
 	console.info('gen directories...')
 	const commonDependencies: {[key: string]: any} = { ...dependencies }
 	for (const lambdaName in lambdaInfos){
-		const { handlerPath: handler, additionalLibrary } = lambdaInfos[lambdaName]
-		const handlerPath = handler.replace(path.extname(handler), '.ts')
+		const { handlerPath, additionalLibrary } = lambdaInfos[lambdaName]
 
 		const lambdaTempPath = path.join(tempPath, lambdaName)
 		const copiedPath = path.join(lambdaTempPath, path.relative(srcPath, handlerPath))
