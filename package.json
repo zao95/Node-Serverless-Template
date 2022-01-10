@@ -5,7 +5,7 @@
     "scripts": {
         "install-dist": "node install.js",
         "build": "npm run build-infra && npm run build-server",
-        "build-server": "npm run bundle && babel ./dist/temp --out-dir ./dist --extensions \".ts\" && npm run cleanUp",
+        "build-server": "ts-node ./scripts/bundle.ts && babel ./dist/temp --out-dir ./dist/API --extensions \".ts\"",
         "build-infra": "babel ./infra --out-dir ./infra-dist --extensions \".ts\"",
         "offline": "npm run build-server && set APP_ENV=Offline && node ./dist/entry.js",
         "bootstrap": "npm run build && cross-env INFRA_ENV=development cdk bootstrap --profile development",
@@ -15,10 +15,7 @@
         "bootstrap-prod": "npm run build && cross-env INFRA_ENV=production cdk bootstrap --profile production",
         "deploy-prod": "npm run build && cross-env INFRA_ENV=production cdk deploy --require-approval never --profile production",
         "diff-prod": "npm run build && cross-env INFRA_ENV=production cdk diff --profile production",
-        "destroy-prod": "cross-env INFRA_ENV=production cdk destroy --force --profile production",
-        "bundle": "ts-node ./scripts/bundle.ts",
-        "cleanUp": "ts-node ./scripts/cleanUp.ts",
-        "test": "ts-node ./scripts/showLibraries.ts"
+        "destroy-prod": "cross-env INFRA_ENV=production cdk destroy --force --profile production"
     },
     "author": "Lee Jeong-Woo, Lim Jae-young",
     "repository": {
