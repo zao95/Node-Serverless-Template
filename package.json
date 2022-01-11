@@ -9,7 +9,7 @@
         "build-infra": "babel ./infra --out-dir ./infra-dist --extensions \".ts\"",
         "offline": "npm run build-server && set APP_ENV=Offline && node ./dist/entry.js",
         "bootstrap": "npm run build && cross-env INFRA_ENV=development cdk bootstrap --profile development",
-        "deploy": "npm run build && cross-env INFRA_ENV=development cdk deploy --require-approval never --profile development",
+        "deploy": "npm run build && cross-env INFRA_ENV=development cdk deploy --require-approval never --profile development && ts-node ./scripts/uploadLayer.ts",
         "diff": "npm run build && cross-env INFRA_ENV=development cdk diff --profile development",
         "destroy": "cross-env INFRA_ENV=development cdk destroy --force --profile development",
         "bootstrap-prod": "npm run build && cross-env INFRA_ENV=production cdk bootstrap --profile production",
