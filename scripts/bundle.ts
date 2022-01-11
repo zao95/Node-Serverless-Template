@@ -105,6 +105,7 @@ const bundle = async () => {
 			await exec(`npm i --prefix ${modulesPath} ${libraryName}@${version}`)
 		}
 		await exec(`cd ${layerCasePath} && zip ../${layerCaseName}.zip node/*`)
+		await fs.rm(layerCasePath, { force: true, recursive: true })
 	}
 
 	const layerJson: {[key: string]: any} = {}
@@ -113,7 +114,7 @@ const bundle = async () => {
 		layerJson[lambdaName] = useCase
 	}
 
-	await fs.writeFile(path.join(layerPath, 'layerList.json'), JSON.stringify(layerJson))
+	await fs.writeFile(path.join(distPath, 'layerList.json'), JSON.stringify(layerJson))
 	// console.log(layerJson)
 }
 
