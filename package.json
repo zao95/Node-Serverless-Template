@@ -15,8 +15,7 @@
         "bootstrap-prod": "npm run build && cross-env INFRA_ENV=production cdk bootstrap --profile production",
         "deploy-prod": "npm run build && cross-env INFRA_ENV=production cdk deploy --require-approval never --profile production",
         "diff-prod": "npm run build && cross-env INFRA_ENV=production cdk diff --profile production",
-        "destroy-prod": "cross-env INFRA_ENV=production cdk destroy --force --profile production",
-        "test": "ts-node ./scripts/uploadLayer.ts"
+        "destroy-prod": "cross-env INFRA_ENV=production cdk destroy --force --profile production"
     },
     "author": "Lee Jeong-Woo, Lim Jae-young",
     "repository": {
