@@ -1,7 +1,7 @@
 
 import path from 'path'
 import fs from 'fs/promises'
-import AWS, { S3 } from 'aws-sdk'
+import AWS from 'aws-sdk'
 
 const layerListPath = path.join(__dirname, '../dist/layerList')
 
@@ -44,9 +44,3 @@ const uploadLayer = async () => {
 }
 
 uploadLayer()
-
-// const sd = () => {
-// 	const s3 = new AWS.S3()
-// 	console.log(s3.config?.credentialProvider[0]())
-// }
-// sd()
