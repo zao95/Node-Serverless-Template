@@ -28,11 +28,17 @@ const extractLambdaInfos = async (swagger: {[key: string]: any}): Promise<{[key:
 	
 	const lambdaInfos: {[key: string]: any} = {}
 	for (const pathKey in paths ){
+		const uris = pathKey.replace('/', '').split('/').map(
+			str => str
+			.replace(/[a-z]/, letter => letter.toUpperCase())
+			.replace(/_[a-z]/, letter => letter.replace(/\_/, '').toUpperCase())
+			.replace(/\{/g, '').replace(/\}/g, '')
+		)
 		const pathInfo = paths[pathKey]
 		for (const method in pathInfo ){
 			const info = pathInfo[method]
 
-			const lambdaName: string = info['x-cdk-lambda-name']
+			const lambdaName: string = method.concat(uris.join(''))
 			const additionalLibrary: string[] = info['x-cdk-additional-library'] || []
 			
 			const handler: string = path.join(srcPath, 'API', info['x-cdk-lambda-handler'])
